@@ -1,4 +1,6 @@
-/* GLOBAL THEME */
+/* -----------------------------------------
+   GLOBAL THEME
+----------------------------------------- */
 body {
     margin: 0;
     padding: 0;
@@ -7,7 +9,9 @@ body {
     color: #fff;
 }
 
-/* NAVIGATION BAR */
+/* -----------------------------------------
+   NAVIGATION BAR
+----------------------------------------- */
 .navbar {
     width: 100%;
     background: rgba(15, 15, 15, 0.85);
@@ -46,7 +50,10 @@ body {
     background: gold;
     box-shadow: 0px 0px 8px gold;
 }
-/* HERO SECTION */
+
+/* -----------------------------------------
+   HERO SECTION
+----------------------------------------- */
 .hero-section {
     text-align: center;
     margin-top: 80px;
@@ -77,7 +84,9 @@ body {
     margin-top: 8px;
 }
 
-/* Animations */
+/* -----------------------------------------
+   HERO ANIMATIONS
+----------------------------------------- */
 @keyframes fadeInUp {
     0% { opacity: 0; transform: translateY(30px); }
     100% { opacity: 1; transform: translateY(0); }
@@ -87,7 +96,10 @@ body {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.06); }
 }
-/* DOSHA ENGINE AREA */
+
+/* -----------------------------------------
+   DOSHA ENGINE AREA
+----------------------------------------- */
 .dosha-container {
     display: flex;
     flex-direction: column;
@@ -96,6 +108,7 @@ body {
     position: relative;
 }
 
+/* Canvas styling with radial gradient & glow */
 canvas {
     border-radius: 50%;
     background: radial-gradient(circle, #0f0f0f, #000);
@@ -104,6 +117,7 @@ canvas {
         0 0 50px rgba(255, 215, 0, 0.15);
 }
 
+/* Dosha Values Text */
 .dosha-values {
     margin-top: 25px;
     text-align: center;
@@ -111,7 +125,10 @@ canvas {
     color: gold;
     letter-spacing: 1px;
 }
-/* FACTOR PANEL */
+
+/* -----------------------------------------
+   FACTOR PANEL
+----------------------------------------- */
 .factor-panel {
     width: 90%;
     max-width: 600px;
@@ -139,7 +156,10 @@ canvas {
 .factor-panel input[type="range"] {
     width: 100%;
 }
-/* AURA BEHIND THE CANVAS */
+
+/* -----------------------------------------
+   AURA GLOW BEHIND CANVAS
+----------------------------------------- */
 .aura-glow {
     position: absolute;
     width: 360px;
@@ -151,13 +171,15 @@ canvas {
     z-index: 0;
 }
 
-/* Make sure canvas is above glow */
+/* Ensure canvas is above glow */
 #doshaCanvas {
     position: relative;
     z-index: 2;
 }
 
-/* STEP B10 — Smooth Pulsation */
+/* -----------------------------------------
+   STEP B10 — Smooth Pulsation Glow
+----------------------------------------- */
 .pulse-glow {
     animation: pulseGlow 4s ease-in-out infinite;
 }
@@ -179,3 +201,42 @@ canvas {
         filter: blur(30px);
     }
 }
+
+/* -----------------------------------------
+   WAVE RINGS (STEP B11 — Prana Emission)
+----------------------------------------- */
+.wave-ring {
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 215, 0, 0.28);
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    animation: waveRing 4s ease-out infinite;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.wave-ring:nth-child(2) {
+    animation-delay: 1.2s;
+}
+
+.wave-ring:nth-child(3) {
+    animation-delay: 2.4s;
+}
+
+@keyframes waveRing {
+    0% {
+        transform: translate(-50%, -50%) scale(0.75);
+        opacity: 0.5;
+    }
+    70% {
+        opacity: 0.15;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(2.2);
+        opacity: 0;
+    }
+        }
