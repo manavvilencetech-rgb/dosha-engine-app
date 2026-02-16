@@ -10,6 +10,14 @@ let vata = 40;
 let pitta = 35;
 let kapha = 25;
 
+// TIME ENGINE VARIABLES
+let t = 0;
+
+// Flowfield noise seeds
+let flowSeed1 = Math.random() * 1000;
+let flowSeed2 = Math.random() * 2000;
+let flowSeed3 = Math.random() * 3000;
+
 // CHAOTIC OSCILLATION FUNCTION
 function chaos(value) {
     let randomShock = (Math.random() - 0.5) * 2;  // chaotic push
@@ -21,6 +29,27 @@ function chaos(value) {
 
     return value;
 }
+
+function oscillate(value, freq = 10, amp = 1.5) {
+    let sine = Math.sin((t / 60) * freq) * amp;
+    return value + sine;
+}
+function flowfield(value, seed) {
+    let n = Math.sin(seed + t * 0.02) * 2;   // organic micro-movement
+    let m = Math.cos(seed + t * 0.015) * 1.5;
+    return value + n + m;
+}
+function coupleDoshas() {
+    // Vata pushes Pitta
+    pitta += (vata - 50) * 0.005;
+
+    // Pitta heats Kapha
+    kapha -= (pitta - 50) * 0.004;
+
+    // Kapha stabilizes Vata
+    vata -= (kapha - 50) * 0.006;
+}
+
 // FACTOR-BASED AYURVEDIC LOGIC
 function applyAyurvedaFactors() {
 
@@ -112,16 +141,38 @@ function updateText() {
 
 // MAIN LOOP (REAL-TIME CHAOS ENGINE)
 function animate() {
+
+    // Apply Ayurveda Factors
     applyAyurvedaFactors();
 
-vata = chaos(vata);
-pitta = chaos(pitta);
-kapha = chaos(kapha);
+    // Apply coupling
+    coupleDoshas();
+
+    // Add wave oscillation
+    vata = oscillate(vata);
+    pitta = oscillate(pitta, 9);
+    kapha = oscillate(kapha, 7);
+
+    // Add flowfield chaos
+    vata = flowfield(vata, flowSeed1);
+    pitta = flowfield(pitta, flowSeed2);
+    kapha = flowfield(kapha, flowSeed3);
+
+    // Add chaotic noise
+    vata = chaos(vata);
+    pitta = chaos(pitta);
+    kapha = chaos(kapha);
+
+    // Clamp boundaries
+    vata = Math.max(0, Math.min(100, vata));
+    pitta = Math.max(0, Math.min(100, pitta));
+    kapha = Math.max(0, Math.min(100, kapha));
 
     // Draw rings
     drawRings();
 
+    // Increase time
+    t += 1;
+
     requestAnimationFrame(animate);
 }
-
-animate();
