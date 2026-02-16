@@ -503,19 +503,23 @@ document.getElementById("downloadPNG").onclick = function () {
     });
 };
 </script>
-
 <script>
-// STEP B14 — Ayurvedic Intelligence Engine (unchanged)
+// ---------------- AYURVEDIC INTELLIGENCE ENGINE ----------------
 function analyzeDoshaState(v, p, k) {
     const highest = Math.max(v, p, k);
     let type = "";
+
     if (highest === v) type = "Vata-dominant state";
-    if (highest === p) type = "Pitta-dominant state";
-    if (highest === k) type = "Kapha-dominant state";
-    let intensity = "";
+    else if (highest === p) type = "Pitta-dominant state";
+    else type = "Kapha-dominant state";
+
     const spread = Math.abs(v - p) + Math.abs(p - k) + Math.abs(k - v);
-    if (spread < 30) intensity = "Balanced or Near-Balanced else if (spread < 60) intensity = "Moderate Oscillation";
+    let intensity = "";
+
+    if (spread < 30) intensity = "Balanced or Near-Balanced";
+    else if (spread < 60) intensity = "Moderate Oscillation";
     else intensity = "High Instability (Chaotic)";
+
     return { type, intensity };
 }
 
@@ -549,15 +553,13 @@ function generateAyurvedicInsight() {
     const state = analyzeDoshaState(vata, pitta, kapha);
     const factors = factorInterpretation();
 
-    let msg = `🧠 **Ayurvedic Analysis**  
-Dosha State: **${state.type}**  
-Oscillation: **${state.intensity}**
-
-`;
+    let msg = `🧠 Ayurvedic Analysis<br>
+Dosha State: ${state.type}<br>
+Oscillation: ${state.intensity}<br><br>`;
 
     if (factors.length > 0) {
-        msg += "Key Influences:\n";
-        factors.forEach(n => { msg += "• " + n + "\n"; });
+        msg += "Key Influences:<br>";
+        factors.forEach(n => { msg += "• " + n + "<br>"; });
     } else {
         msg += "All factors appear within stable ranges.";
     }
@@ -565,7 +567,7 @@ Oscillation: **${state.intensity}**
     return msg;
 }
 
-// Display area for Ayurvedic analysis
+// Create display box for Ayurvedic analysis
 const reasoningBox = document.createElement("div");
 reasoningBox.id = "ayurvedaAI";
 reasoningBox.style.marginTop = "20px";
@@ -579,11 +581,12 @@ reasoningBox.style.whiteSpace = "pre-line";
 
 document.body.appendChild(reasoningBox);
 
-// Update Ayurvedic insights every 2 seconds
+// Update insights every 2 seconds
 setInterval(() => {
     reasoningBox.innerHTML = generateAyurvedicInsight();
 }, 2000);
-
+</script> 
 </script>
 </body>
 </html>
+
