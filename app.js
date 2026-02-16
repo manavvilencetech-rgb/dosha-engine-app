@@ -21,6 +21,49 @@ function chaos(value) {
 
     return value;
 }
+// FACTOR-BASED AYURVEDIC LOGIC
+function applyAyurvedaFactors() {
+
+    let sleep = document.getElementById("sleep").value;
+    let hydration = document.getElementById("hydration").value;
+    let stress = document.getElementById("stress").value;
+    let agni = document.getElementById("agni").value;
+    let temp = document.getElementById("temp").value;
+    let food = document.getElementById("food").value;
+    let routine = document.getElementById("routine").value;
+    let season = document.getElementById("season").value;
+    let ama = document.getElementById("ama").value;
+    let activity = document.getElementById("activity").value;
+
+    // VATA RULES
+    vata +=
+        (100 - sleep) * 0.02 +
+        (100 - hydration) * 0.015 +
+        stress * 0.03 +
+        (100 - routine) * 0.02 +
+        (season > 70 ? 0.5 : 0);
+
+    // PITTA RULES
+    pitta +=
+        temp * 0.02 +
+        food * 0.015 +
+        stress * 0.01 +
+        ama * 0.01 +
+        agni * 0.02;
+
+    // KAPHA RULES
+    kapha +=
+        (100 - activity) * 0.02 +
+        food * 0.01 +
+        hydration * 0.02 +
+        temp < 40 ? 0.03 : 0 +
+        ama * 0.02;
+
+    // Clamp values
+    vata = Math.max(0, Math.min(100, vata));
+    pitta = Math.max(0, Math.min(100, pitta));
+    kapha = Math.max(0, Math.min(100, kapha));
+}
 
 // DRAW MULTI-RING OSCILLATION VISUAL
 function drawRings() {
@@ -69,10 +112,11 @@ function updateText() {
 
 // MAIN LOOP (REAL-TIME CHAOS ENGINE)
 function animate() {
-    // Apply chaos
-    vata = chaos(vata);
-    pitta = chaos(pitta);
-    kapha = chaos(kapha);
+    applyAyurvedaFactors();
+
+vata = chaos(vata);
+pitta = chaos(pitta);
+kapha = chaos(kapha);
 
     // Draw rings
     drawRings();
