@@ -79,5 +79,78 @@
 </div>
     
     <script src="app.js"></script>
+    <script>
+// ------------------------------
+// REAL-TIME DOSHA OSCILLATION ENGINE (STEP B9)
+// ------------------------------
+
+let vata = 40;
+let pitta = 35;
+let kapha = 25;
+
+// Chaos factor (makes motion alive)
+let chaos = 0.09;
+
+// Smooth animation variable
+let t = 0;
+
+// Select the glow circle
+const engineGlow = document.querySelector(".glow-ring");
+
+// Update display function
+function updateDisplay() {
+    document.getElementById("vataVal").innerText = Math.round(vata);
+    document.getElementById("pittaVal").innerText = Math.round(pitta);
+    document.getElementById("kaphaVal").innerText = Math.round(kapha);
+
+    // Glow intensity = imbalance
+    let imbalance = Math.abs(vata - pitta) + Math.abs(pitta - kapha) + Math.abs(kapha - vata);
+    let glow = Math.min(imbalance * 0.8, 150);
+
+    engineGlow.style.filter = `blur(${12 + glow / 15}px) brightness(${1 + glow / 120})`;
+}
+
+// Slider inputs (Step B8 connected)
+function getFactor(id) {
+    return parseInt(document.getElementById(id).value);
+}
+
+// MAIN OSCILLATION ENGINE
+function oscillate() {
+    t += 0.015;
+
+    // Read factor influences
+    let sleep = getFactor("sleep");
+    let hydration = getFactor("hydration");
+    let stress = getFactor("stress");
+    let agni = getFactor("agni");
+    let temperature = getFactor("temp");
+    let food = getFactor("food");
+    let routine = getFactor("routine");
+    let season = getFactor("season");
+    let ama = getFactor("ama");
+    let activity = getFactor("activity");
+
+    // ---- Real-time oscillation logic ----
+    
+    vata += Math.sin(t * 2.5) * chaos * (stress/10 + season/20 + activity/15);
+    pitta += Math.cos(t * 1.8) * chaos * (temperature/15 + food/25 + stress/10);
+    kapha += Math.sin(t * 1.2 + Math.cos(t * 2)) * chaos * (hydration/10 + ama/15 + routine/18);
+
+    // Bring back to total = 100
+    let total = vata + pitta + kapha;
+    vata = (vata / total) * 100;
+    pitta = (pitta / total) * 100;
+    kapha = (kapha / total) * 100;
+
+    updateDisplay();
+    requestAnimationFrame(oscillate);
+}
+
+updateDisplay();
+oscillate();
+
+    </script>
+    
 </body>
 </html>
