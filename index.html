@@ -161,6 +161,22 @@
     <input type="range" min="0" max="100" value="75" id="activity">
 
 </div>
+    <div style="margin-top:20px; text-align:center;">
+    <button id="downloadPDF" 
+            style="padding:8px 18px; border-radius:6px; background:#ffd700; color:#000; border:none;">
+        📄 Download PDF Report
+    </button>
+
+    <button id="downloadJSON" 
+            style="padding:8px 18px; border-radius:6px; background:#ffaa00; color:#000; border:none; margin-left:10px;">
+        🧾 Export JSON
+    </button>
+
+    <button id="downloadPNG" 
+            style="padding:8px 18px; border-radius:6px; background:#55ffcc; color:#000; border:none; margin-left:10px;">
+        📸 Save Screenshot
+    </button>
+</div>
     
     <script src="app.js"></script>
     <script>
@@ -198,23 +214,6 @@ function updateDisplay() {
 function getFactor(id) {
     return parseInt(document.getElementById(id).value);
 }
-        <div style="margin-top:20px; text-align:center;">
-    <button id="downloadPDF" 
-            style="padding:8px 18px; border-radius:6px; background:#ffd700; color:#000; border:none;">
-        📄 Download PDF Report
-    </button>
-
-    <button id="downloadJSON" 
-            style="padding:8px 18px; border-radius:6px; background:#ffaa00; color:#000; border:none; margin-left:10px;">
-        🧾 Export JSON
-    </button>
-
-    <button id="downloadPNG" 
-            style="padding:8px 18px; border-radius:6px; background:#55ffcc; color:#000; border:none; margin-left:10px;">
-        📸 Save Screenshot
-    </button>
-</div>
-        
 // ---- Audio response to dosha ----
 if (audioEnabled && window.doshaAudio) {
     // Deep drone follows Kapha (earth/water)
