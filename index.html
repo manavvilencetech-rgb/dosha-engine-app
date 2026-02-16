@@ -214,14 +214,6 @@ function updateDisplay() {
 function getFactor(id) {
     return parseInt(document.getElementById(id).value);
 }
-// ---- Audio response to dosha ----
-if (audioEnabled && window.doshaAudio) {
-    // Deep drone follows Kapha (earth/water)
-    window.doshaAudio.droneOscillator.frequency.value = 60 + kapha * 0.4;
-
-    // Light airy tone follows Vata
-    window.doshaAudio.vataOsc.frequency.value = 140 + vata * 0.8;
-        }
         
 // MAIN OSCILLATION ENGINE
 function oscillate() {
@@ -251,12 +243,19 @@ function oscillate() {
     pitta = (pitta / total) * 100;
     kapha = (kapha / total) * 100;
 
+    function oscillate() {
+    // all your existing dosha update code remains same…
+
+    // AUDIO FOLLOWING DOSHA VALUES
+    if (audioEnabled && window.doshaAudio) {
+        window.doshaAudio.droneOscillator.frequency.value = 60 + kapha * 0.4;
+        window.doshaAudio.vataOsc.frequency.value = 140 + vata * 0.8;
+    }
+
+    // final steps
     updateDisplay();
     requestAnimationFrame(oscillate);
 }
-
-updateDisplay();
-oscillate();
 
     </script>
  <script>
