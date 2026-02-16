@@ -1,486 +1,300 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dosha Oscillation Engine</title>
-    <div id="soundToggle" 
-     style="cursor:pointer; 
-            margin-top:10px; 
-            color:#ffd700; 
-            font-size:14px; 
-            opacity:0.7;">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dosha Oscillation Engine</title>
+
+<!-- SOUND TOGGLE BUTTON -->
+<div id="soundToggle" 
+     style="cursor:pointer; margin-top:10px; color:#ffd700; font-size:14px; opacity:0.7;">
     🔈 Sound: OFF
-    </div>
-    <link rel="stylesheet" href="style.css" />
-    <style>
-/* -------------------------------------------
-   STEP B11 — Prana Wave Rings Emission
-------------------------------------------- */
+</div>
 
-.wave-ring {
-    position: absolute;
-    width: 260px;
-    height: 260px;
-    border-radius: 50%;
-    border: 2px solid rgba(255, 215, 0, 0.28);
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    animation: waveRing 4s ease-out infinite;
-    pointer-events: none;
+<!-- STYLES -->
+<link rel="stylesheet" href="style.css" />
+<style>
+/* -----------------------------------------
+   GLOBAL THEME
+----------------------------------------- */
+body {
+    margin: 0;
+    padding: 0;
+    background: #0b0b0b;
+    font-family: "Poppins", sans-serif;
+    color: #fff;
 }
 
-.wave-ring:nth-child(2) {
-    animation-delay: 1.2s;
+/* NAVIGATION BAR */
+.navbar {
+    width: 100%;
+    background: rgba(15, 15, 15, 0.85);
+    backdrop-filter: blur(10px);
+    padding: 14px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.25);
 }
+.logo { font-size:20px; font-weight:600; color:gold; letter-spacing:0.5px; }
+.nav-links { list-style:none; display:flex; gap:25px; }
+.nav-links a {
+    text-decoration:none; color:#e6e6e6; font-size:16px;
+    padding:8px 14px; border-radius:8px; transition:0.3s ease;
+}
+.nav-links a:hover { color:#000; background:gold; box-shadow:0px 0px 8px gold; }
 
-.wave-ring:nth-child(3) {
-    animation-delay: 2.4s;
-}
+/* HERO SECTION */
+.hero-section { text-align:center; margin-top:80px; animation:fadeInUp 1.2s ease; }
+.hero-logo { width:110px; height:110px; border-radius:50%; object-fit:cover; margin-bottom:20px; filter:drop-shadow(0 0 10px rgba(255,215,0,0.4)); animation:breathe 4s infinite ease-in-out; }
+.hero-title { font-size:32px; font-weight:700; color:gold; letter-spacing:1px; }
+.hero-tagline { font-size:17px; font-weight:300; color:#d8d8d8; margin-top:8px; }
 
-@keyframes waveRing {
-    0% {
-        transform: translate(-50%, -50%) scale(0.75);
-        opacity: 0.5;
-    }
-    70% {
-        opacity: 0.15;
-    }
-    100% {
-        transform: translate(-50%, -50%) scale(2.2);
-        opacity: 0;
-    }
-}
-        
-/* -------------------------------------------
-   STEP B10 — Premium Smooth Pulsating Aura
-------------------------------------------- */
-.pulse-glow {
-    animation: pulseGlow 4s ease-in-out infinite;
-    transition: all 0.3s ease-in-out;
-}
+/* HERO ANIMATIONS */
+@keyframes fadeInUp { 0% { opacity:0; transform:translateY(30px); } 100% { opacity:1; transform:translateY(0); } }
+@keyframes breathe { 0%,100%{transform:scale(1);} 50%{transform:scale(1.06);} }
 
+/* DOSHA ENGINE AREA */
+.dosha-container { display:flex; flex-direction:column; align-items:center; margin-top:60px; position:relative; }
+canvas {
+    border-radius:50%;
+    background: radial-gradient(circle,#0f0f0f,#000);
+    box-shadow:0 0 25px rgba(255,215,0,0.3),0 0 50px rgba(255,215,0,0.15);
+}
+.dosha-values { margin-top:25px; text-align:center; font-size:20px; color:gold; letter-spacing:1px; }
+
+/* FACTOR PANEL */
+.factor-panel {
+    width:90%; max-width:600px; margin:60px auto;
+    background: rgba(20,20,20,0.35); padding:25px; border-radius:20px;
+    color: gold; border:1px solid rgba(255,215,0,0.3); backdrop-filter:blur(8px);
+}
+.factor-panel h2 { text-align:center; margin-bottom:20px; }
+.factor-panel label { display:block; margin-top:18px; margin-bottom:5px; font-size:16px; }
+.factor-panel input[type="range"] { width:100%; }
+
+/* AURA GLOW */
+.aura-glow { position:absolute; width:360px; height:360px; border-radius:50%; background:radial-gradient(circle, rgba(255,215,0,0.35), rgba(0,0,0,0) 70%); filter:blur(35px); pointer-events:none; z-index:0; }
+#doshaCanvas { position:relative; z-index:2; }
+
+/* STEP B10 — PULSE GLOW */
+.pulse-glow { animation:pulseGlow 4s ease-in-out infinite; transition: all 0.3s ease-in-out; }
 @keyframes pulseGlow {
-    0% {
-        transform: scale(1);
-        filter: blur(25px) brightness(1);
-        opacity: 0.85;
-    }
-    50% {
-        transform: scale(1.03);
-        filter: blur(30px) brightness(1.18);
-        opacity: 1;
-    }
-    100% {
-        transform: scale(1);
-        filter: blur(25px) brightness(1);
-        opacity: 0.85;
-    }
+    0% { transform:scale(1); filter:blur(25px) brightness(1); opacity:0.85; }
+    50%{ transform:scale(1.03); filter:blur(30px) brightness(1.18); opacity:1; }
+    100%{ transform:scale(1); filter:blur(25px) brightness(1); opacity:0.85; }
+}
+
+/* STEP B11 — WAVE RINGS */
+.wave-ring {
+    position:absolute; width:260px; height:260px; border-radius:50%; border:2px solid rgba(255,215,0,0.28);
+    left:50%; top:50%; transform:translate(-50%,-50%); animation:waveRing 4s ease-out infinite; pointer-events:none; z-index:1;
+}
+.wave-ring:nth-child(2) { animation-delay:1.2s; }
+.wave-ring:nth-child(3) { animation-delay:2.4s; }
+@keyframes waveRing {
+    0%{ transform:translate(-50%,-50%) scale(0.75); opacity:0.5; }
+    70%{ opacity:0.15; }
+    100%{ transform:translate(-50%,-50%) scale(2.2); opacity:0; }
 }
 </style>
-    
 </head>
 
 <body>
 
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="logo">Dosha Oscillation Engine</div>
-        <ul class="nav-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#oscillation">Oscillation</a></li>
-            <li><a href="#prakriti">Prakriti</a></li>
-            <li><a href="#settings">Settings</a></li>
-        </ul>
-    </nav>
-<!-- HEADER SECTION -->
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo">Dosha Oscillation Engine</div>
+    <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#oscillation">Oscillation</a></li>
+        <li><a href="#prakriti">Prakriti</a></li>
+        <li><a href="#settings">Settings</a></li>
+    </ul>
+</nav>
+
+<!-- HERO -->
 <header class="hero-section">
-
     <img src="logo.png" alt="Logo" class="hero-logo" />
-
     <h1 class="hero-title">Dosha Oscillation Engine</h1>
-
     <p class="hero-tagline">Luxury Healing Through Ayurvedic Intelligence...</p>
-
 </header>
-    <!-- DOSHA OSCILLATION ENGINE UI -->
+
+<!-- DOSHA OSCILLATION ENGINE -->
 <div class="dosha-container">
-
-    <!-- Added glow layer -->
     <div class="glow-ring pulse-glow"></div>
-
-<div class="wave-ring"></div>
-<div class="wave-ring"></div>
-<div class="wave-ring"></div>
+    <div class="wave-ring"></div>
+    <div class="wave-ring"></div>
+    <div class="wave-ring"></div>
     <div class="aura-glow pulse-glow"></div>
 
-    <!-- Your existing canvas -->
     <canvas id="doshaCanvas" width="380" height="380"></canvas>
 
     <div class="dosha-values">
-    <p>Vata: <span id="vataVal">40</span></p>
-    <p>Pitta: <span id="pittaVal">35</span></p>
-    <p>Kapha: <span id="kaphaVal">25</span></p>
+        <p>Vata: <span id="vataVal">40</span></p>
+        <p>Pitta: <span id="pittaVal">35</span></p>
+        <p>Kapha: <span id="kaphaVal">25</span></p>
+    </div>
 </div>
 
-</div>
-    <!-- FACTOR INPUT PANEL -->
+<!-- FACTOR PANEL -->
 <div class="factor-panel">
-
     <h2>Dosha Factor Inputs</h2>
-
-    <label>Sleep Quality</label>
-    <input type="range" min="0" max="100" value="70" id="sleep">
-
-    <label>Hydration Level</label>
-    <input type="range" min="0" max="100" value="60" id="hydration">
-
-    <label>Stress Level</label>
-    <input type="range" min="0" max="100" value="40" id="stress">
-
-    <label>Agni (Digestion Strength)</label>
-    <input type="range" min="0" max="100" value="55" id="agni">
-
-    <label>Temperature (Hot/Cold)</label>
-    <input type="range" min="0" max="100" value="45" id="temp">
-
-    <label>Food Type (Ushna, Snigdha, Ruksha…)</label>
-    <input type="range" min="0" max="100" value="50" id="food">
-
-    <label>Daily Routine Stability</label>
-    <input type="range" min="0" max="100" value="65" id="routine">
-
-    <label>Seasonal Effect</label>
-    <input type="range" min="0" max="100" value="50" id="season">
-
-    <label>Ama (Toxin Load)</label>
-    <input type="range" min="0" max="100" value="30" id="ama">
-
-    <label>Activity Level</label>
-    <input type="range" min="0" max="100" value="75" id="activity">
-
+    <label>Sleep Quality</label><input type="range" min="0" max="100" value="70" id="sleep">
+    <label>Hydration Level</label><input type="range" min="0" max="100" value="60" id="hydration">
+    <label>Stress Level</label><input type="range" min="0" max="100" value="40" id="stress">
+    <label>Agni (Digestion Strength)</label><input type="range" min="0" max="100" value="55" id="agni">
+    <label>Temperature (Hot/Cold)</label><input type="range" min="0" max="100" value="45" id="temp">
+    <label>Food Type (Ushna, Snigdha, Ruksha…)</label><input type="range" min="0" max="100" value="50" id="food">
+    <label>Daily Routine Stability</label><input type="range" min="0" max="100" value="65" id="routine">
+    <label>Seasonal Effect</label><input type="range" min="0" max="100" value="50" id="season">
+    <label>Ama (Toxin Load)</label><input type="range" min="0" max="100" value="30" id="ama">
+    <label>Activity Level</label><input type="range" min="0" max="100" value="75" id="activity">
 </div>
-    <div style="margin-top:20px; text-align:center;">
-    <button id="downloadPDF" 
-            style="padding:8px 18px; border-radius:6px; background:#ffd700; color:#000; border:none;">
+
+<!-- EXPORT BUTTONS -->
+<div style="margin-top:20px; text-align:center;">
+    <button id="downloadPDF" style="padding:8px 18px; border-radius:6px; background:#ffd700; color:#000; border:none;">
         📄 Download PDF Report
     </button>
-
-    <button id="downloadJSON" 
-            style="padding:8px 18px; border-radius:6px; background:#ffaa00; color:#000; border:none; margin-left:10px;">
+    <button id="downloadJSON" style="padding:8px 18px; border-radius:6px; background:#ffaa00; color:#000; border:none; margin-left:10px;">
         🧾 Export JSON
     </button>
-
-    <button id="downloadPNG" 
-            style="padding:8px 18px; border-radius:6px; background:#55ffcc; color:#000; border:none; margin-left:10px;">
+    <button id="downloadPNG" style="padding:8px 18px; border-radius:6px; background:#55ffcc; color:#000; border:none; margin-left:10px;">
         📸 Save Screenshot
     </button>
 </div>
-    
-    <script src="app.js"></script>
-    <script>
-// ------------------------------
-// REAL-TIME DOSHA OSCILLATION ENGINE (STEP B9)
-// ------------------------------
 
-let vata = 40;
-let pitta = 35;
-let kapha = 25;
+<!-- HTML2Canvas -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-// Chaos factor (makes motion alive)
-let chaos = 0.09;
-
-// Smooth animation variable
-let t = 0;
-
-// Select the glow circle
+<!-- MAIN OSCILLATION ENGINE + AUDIO + EXPORT + AIE -->
+<script>
+// -----------------------------
+// B9 — REAL-TIME DOSHA ENGINE
+// -----------------------------
+let vata = 40, pitta = 35, kapha = 25;
+let t = 0, chaos = 0.09;
 const engineGlow = document.querySelector(".glow-ring");
 
-// Update display function
+function getFactor(id) { return parseInt(document.getElementById(id).value); }
 function updateDisplay() {
     document.getElementById("vataVal").innerText = Math.round(vata);
     document.getElementById("pittaVal").innerText = Math.round(pitta);
     document.getElementById("kaphaVal").innerText = Math.round(kapha);
-
-    // Glow intensity = imbalance
-    let imbalance = Math.abs(vata - pitta) + Math.abs(pitta - kapha) + Math.abs(kapha - vata);
-    let glow = Math.min(imbalance * 0.8, 150);
-
-    engineGlow.style.filter = `blur(${12 + glow / 15}px) brightness(${1 + glow / 120})`;
+    let imbalance = Math.abs(vata-pitta)+Math.abs(pitta-kapha)+Math.abs(kapha-vata);
+    let glow = Math.min(imbalance*0.8,150);
+    engineGlow.style.filter = `blur(${12+glow/15}px) brightness(${1+glow/120})`;
 }
 
-// Slider inputs (Step B8 connected)
-function getFactor(id) {
-    return parseInt(document.getElementById(id).value);
+// STEP B12 — AUDIO
+let audioEnabled=false, audioCtx=null, droneOscillator=null, vataOsc=null;
+function initAudio() {
+    if(audioCtx) return;
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    droneOscillator = audioCtx.createOscillator(); droneOscillator.type="sine"; droneOscillator.frequency.value=80; droneOscillator.start();
+    const droneGain = audioCtx.createGain(); droneGain.gain.value=0.0; droneOscillator.connect(droneGain); droneGain.connect(audioCtx.destination);
+    vataOsc = audioCtx.createOscillator(); vataOsc.type="sine"; vataOsc.frequency.value=200; vataOsc.start();
+    const vataGain = audioCtx.createGain(); vataGain.gain.value=0.0; vataOsc.connect(vataGain); vataGain.connect(audioCtx.destination);
+    window.doshaAudio={droneGain,vataGain,droneOscillator,vataOsc};
 }
-        
-// MAIN OSCILLATION ENGINE
-function oscillate() {
-    t += 0.015;
+document.getElementById("soundToggle").onclick=function(){
+    if(!audioCtx)initAudio();
+    audioEnabled=!audioEnabled;
+    this.innerText=audioEnabled?"🔊 Sound: ON":"🔈 Sound: OFF";
+    window.doshaAudio.droneGain.gain.value=audioEnabled?0.25:0.0;
+    window.doshaAudio.vataGain.gain.value=audioEnabled?0.12:0.0;
+}
 
-    // Read factor influences
-    let sleep = getFactor("sleep");
-    let hydration = getFactor("hydration");
-    let stress = getFactor("stress");
-    let agni = getFactor("agni");
-    let temperature = getFactor("temp");
-    let food = getFactor("food");
-    let routine = getFactor("routine");
-    let season = getFactor("season");
-    let ama = getFactor("ama");
-    let activity = getFactor("activity");
+// MAIN OSCILLATE LOOP
+function animate() {
+    t+=0.015;
+    // factors
+    let sleep=getFactor("sleep"), hydration=getFactor("hydration"), stress=getFactor("stress");
+    let agni=getFactor("agni"), temp=getFactor("temp"), food=getFactor("food");
+    let routine=getFactor("routine"), season=getFactor("season"), ama=getFactor("ama"), activity=getFactor("activity");
 
-    // ---- Real-time oscillation logic ----
-    
-    vata += Math.sin(t * 2.5) * chaos * (stress/10 + season/20 + activity/15);
-    pitta += Math.cos(t * 1.8) * chaos * (temperature/15 + food/25 + stress/10);
-    kapha += Math.sin(t * 1.2 + Math.cos(t * 2)) * chaos * (hydration/10 + ama/15 + routine/18);
+    // dosha updates
+    vata += Math.sin(t*2.5)*chaos*(stress/10 + season/20 + activity/15);
+    pitta += Math.cos(t*1.8)*chaos*(temp/15 + food/25 + stress/10);
+    kapha += Math.sin(t*1.2+Math.cos(t*2))*chaos*(hydration/10 + ama/15 + routine/18);
 
-    // Bring back to total = 100
-    let total = vata + pitta + kapha;
-    vata = (vata / total) * 100;
-    pitta = (pitta / total) * 100;
-    kapha = (kapha / total) * 100;
+    let total=vata+pitta+kapha;
+    vata=(vata/total)*100; pitta=(pitta/total)*100; kapha=(kapha/total)*100;
 
-    function oscillate() {
-    // all your existing dosha update code remains same…
-
-    // AUDIO FOLLOWING DOSHA VALUES
-    if (audioEnabled && window.doshaAudio) {
-        window.doshaAudio.droneOscillator.frequency.value = 60 + kapha * 0.4;
-        window.doshaAudio.vataOsc.frequency.value = 140 + vata * 0.8;
+    if(audioEnabled && window.doshaAudio){
+        window.doshaAudio.droneOscillator.frequency.value = 60 + kapha*0.4;
+        window.doshaAudio.vataOsc.frequency.value = 140 + vata*0.8;
     }
 
-    // final steps
     updateDisplay();
-    requestAnimationFrame(oscillate);
+    requestAnimationFrame(animate);
 }
+animate();
 
-    </script>
- <script>
-// --------------------------------------------------
-// STEP B12 — Prana Audio Oscillation Engine
-// --------------------------------------------------
-
-let audioEnabled = false;
-let audioCtx = null;
-let droneOscillator = null;
-let vataOsc = null;
-
-function initAudio() {
-    if (audioCtx) return;
-
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-    // Deep Prana Hum
-    droneOscillator = audioCtx.createOscillator();
-    droneOscillator.type = "sine";
-    droneOscillator.frequency.value = 80; // deep base hum
-    droneOscillator.start();
-
-    const droneGain = audioCtx.createGain();
-    droneGain.gain.value = 0.0; // silent at start
-
-    droneOscillator.connect(droneGain);
-    droneGain.connect(audioCtx.destination);
-
-    // Light Vata Pulse
-    vataOsc = audioCtx.createOscillator();
-    vataOsc.type = "sine";
-    vataOsc.frequency.value = 200;
-    vataOsc.start();
-
-    const vataGain = audioCtx.createGain();
-    vataGain.gain.value = 0.0;
-
-    vataOsc.connect(vataGain);
-    vataGain.connect(audioCtx.destination);
-
-    // Make accessible for engine updates
-    window.doshaAudio = {
-        droneGain,
-        vataGain,
-        droneOscillator,
-        vataOsc
-    };
-}
-
-document.getElementById("soundToggle").onclick = function () {
-    if (!audioCtx) initAudio();
-
-    audioEnabled = !audioEnabled;
-
-    this.innerText = audioEnabled ? "🔊 Sound: ON" : "🔈 Sound: OFF";
-
-    window.doshaAudio.droneGain.gain.value = audioEnabled ? 0.25 : 0.0;
-    window.doshaAudio.vataGain.gain.value = audioEnabled ? 0.12 : 0.0;
-};
- </script>
-    <script>
-// ---------------------------------------------------
-// STEP B13 — EXPORT SYSTEM (PDF + JSON + PNG)
-// ---------------------------------------------------
-
-// JSON EXPORT
-document.getElementById("downloadJSON").onclick = function () {
-    let data = {
-        timestamp: new Date().toISOString(),
-        vata: Math.round(vata),
-        pitta: Math.round(pitta),
-        kapha: Math.round(kapha),
-        factors: {
-            sleep: getFactor("sleep"),
-            hydration: getFactor("hydration"),
-            stress: getFactor("stress"),
-            agni: getFactor("agni"),
-            temperature: getFactor("temp"),
-            food: getFactor("food"),
-            routine: getFactor("routine"),
-            season: getFactor("season"),
-            ama: getFactor("ama"),
-            activity: getFactor("activity")
-        }
-    };
-
-    const file = new Blob([JSON.stringify(data, null, 2)], {type: "application/json"});
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(file);
-    link.download = "dosha_snapshot.json";
-    link.click();
+// STEP B13 — EXPORT
+document.getElementById("downloadJSON").onclick=function(){
+    let data={ timestamp:new Date().toISOString(), vata:Math.round(vata), pitta:Math.round(pitta), kapha:Math.round(kapha),
+    factors:{ sleep:getFactor("sleep"), hydration:getFactor("hydration"), stress:getFactor("stress"),
+    agni:getFactor("agni"), temperature:getFactor("temp"), food:getFactor("food"), routine:getFactor("routine"),
+    season:getFactor("season"), ama:getFactor("ama"), activity:getFactor("activity")}};
+    const file=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+    const link=document.createElement("a"); link.href=URL.createObjectURL(file); link.download="dosha_snapshot.json"; link.click();
 };
 
-
-// PDF EXPORT
-document.getElementById("downloadPDF").onclick = function () {
-    let pdfContent = `
-        **Dosha Oscillation Report**
-        Generated: ${new Date().toLocaleString()}
-
-        Vata: ${Math.round(vata)}
-        Pitta: ${Math.round(pitta)}
-        Kapha: ${Math.round(kapha)}
-
-        -----------------------------
-        Input Factors:
-        Sleep: ${getFactor("sleep")}
-        Hydration: ${getFactor("hydration")}
-        Stress: ${getFactor("stress")}
-        Agni: ${getFactor("agni")}
-        Temperature: ${getFactor("temp")}
-        Food: ${getFactor("food")}
-        Routine: ${getFactor("routine")}
-        Season: ${getFactor("season")}
-        Ama: ${getFactor("ama")}
-        Activity: ${getFactor("activity")}
-    `;
-
-    const blob = new Blob([pdfContent], { type: "text/plain" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "Dosha_Report.pdf";
-    link.click();
+document.getElementById("downloadPDF").onclick=function(){
+    let pdfContent = `Dosha Oscillation Report\nGenerated: ${new Date().toLocaleString()}\n\nVata: ${Math.round(vata)}\nPitta: ${Math.round(pitta)}\nKapha: ${Math.round(kapha)}\n\nInput Factors:\nSleep: ${getFactor("sleep")}\nHydration: ${getFactor("hydration")}\nStress: ${getFactor("stress")}\nAgni: ${getFactor("agni")}\nTemperature: ${getFactor("temp")}\nFood: ${getFactor("food")}\nRoutine: ${getFactor("routine")}\nSeason: ${getFactor("season")}\nAma: ${getFactor("ama")}\nActivity: ${getFactor("activity")}`;
+    const blob = new Blob([pdfContent], {type:"text/plain"});
+    const link=document.createElement("a"); link.href=URL.createObjectURL(blob); link.download="Dosha_Report.pdf"; link.click();
 };
 
-
-// SCREENSHOT EXPORT
-document.getElementById("downloadPNG").onclick = function () {
-    html2canvas(document.body).then(canvas => {
-        const link = document.createElement("a");
-        link.download = "dosha_screenshot.png";
-        link.href = canvas.toDataURL();
-        link.click();
+document.getElementById("downloadPNG").onclick=function(){
+    html2canvas(document.body).then(canvas=>{
+        const link=document.createElement("a"); link.download="dosha_screenshot.png"; link.href=canvas.toDataURL(); link.click();
     });
 };
-</script>
-    
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script>
-// ----------------------------------------------------
-// STEP B14 — Ayurvedic Intelligence Engine (AIE)
-// ----------------------------------------------------
 
-function analyzeDoshaState(v, p, k) {
-    const highest = Math.max(v, p, k);
-    let type = "";
-
-    if (highest === v) type = "Vata-dominant state";
-    if (highest === p) type = "Pitta-dominant state";
-    if (highest === k) type = "Kapha-dominant state";
-
-    let intensity = "";
-    const spread = Math.abs(v - p) + Math.abs(p - k) + Math.abs(k - v);
-
-    if (spread < 30) intensity = "Balanced or Near-Balanced";
-    else if (spread < 60) intensity = "Moderate Oscillation";
-    else intensity = "High Instability (Chaotic)";
-
-    return { type, intensity };
+// STEP B14 — AYURVEDIC INTELLIGENCE ENGINE
+function analyzeDoshaState(v,p,k){
+    const highest=Math.max(v,p,k); let type="";
+    if(highest===v) type="Vata-dominant state";
+    if(highest===p) type="Pitta-dominant state";
+    if(highest===k) type="Kapha-dominant state";
+    const spread=Math.abs(v-p)+Math.abs(p-k)+Math.abs(k-v);
+    let intensity="";
+    if(spread<30) intensity="Balanced or Near-Balanced";
+    else if(spread<60) intensity="Moderate Oscillation";
+    else intensity="High Instability (Chaotic)";
+    return {type,intensity};
 }
 
-function factorInterpretation() {
-    const f = (id) => getFactor(id);
-
-    let notes = [];
-
-    if (f("stress") > 70)
-        notes.push("High stress is sharply increasing Vata instability.");
-
-    if (f("sleep") < 30)
-        notes.push("Low sleep is aggravating Vata and reducing grounding.");
-
-    if (f("hydration") < 40)
-        notes.push("Low hydration is weakening Pitta-Kapha stability.");
-
-    if (f("ama") > 60)
-        notes.push("High Ama is disturbing Kapha and blocking Agni.");
-
-    if (f("agni") < 40)
-        notes.push("Weak Agni is slowing digestion and elevating Kapha dampness.");
-
-    if (f("temp") > 70)
-        notes.push("High temperature is overheating and sharpening Pitta.");
-
-    if (f("food") > 70)
-        notes.push("Heavy food load is pushing Kapha upward.");
-
-    if (f("activity") < 30)
-        notes.push("Low activity is reducing Vata flow and increasing Kapha stagnation.");
-
-    if (f("season") > 70)
-        notes.push("Seasonal influence is amplifying dosha oscillation.");
-
+function factorInterpretation(){
+    const f=id=>getFactor(id);
+    let notes=[];
+    if(f("stress")>70) notes.push("High stress is sharply increasing Vata instability.");
+    if(f("sleep")<30) notes.push("Low sleep is aggravating Vata and reducing grounding.");
+    if(f("hydration")<40) notes.push("Low hydration is weakening Pitta-Kapha stability.");
+    if(f("ama")>60) notes.push("High Ama is disturbing Kapha and blocking Agni.");
+    if(f("agni")<40) notes.push("Weak Agni is slowing digestion and elevating Kapha dampness.");
+    if(f("temp")>70) notes.push("High temperature is overheating and sharpening Pitta.");
+    if(f("food")>70) notes.push("Heavy food load is pushing Kapha upward.");
+    if(f("activity")<30) notes.push("Low activity is reducing Vata flow and increasing Kapha stagnation.");
+    if(f("season")>70) notes.push("Seasonal influence is amplifying dosha oscillation.");
     return notes;
 }
 
-function generateAyurvedicInsight() {
-    const state = analyzeDoshaState(vata, pitta, kapha);
-    const factors = factorInterpretation();
-
-    let msg = `🧠 **Ayurvedic Analysis**  
-Dosha State: **${state.type}**  
-Oscillation: **${state.intensity}**
-
-`;
-
-    if (factors.length > 0) {
-        msg += "Key Influences:\n";
-        factors.forEach(n => {
-            msg += "• " + n + "\n";
-        });
-    } else {
-        msg += "All factors appear within stable ranges.";
-    }
-
+function generateAyurvedicInsight(){
+    const state=analyzeDoshaState(vata,pitta,kapha);
+    const factors=factorInterpretation();
+    let msg=`🧠 Ayurvedic Analysis\nDosha State: ${state.type}\nOscillation: ${state.intensity}\n\n`;
+    if(factors.length>0){ msg+="Key Influences:\n"; factors.forEach(n=>{msg+="• "+n+"\n";}); }
+    else msg+="All factors appear within stable ranges.";
     return msg;
 }
 
-// Display area
-const reasoningBox = document.createElement("div");
-reasoningBox.id = "ayurvedaAI";
-reasoningBox.style.marginTop = "20px";
-reasoningBox.style.padding = "15px";
-reasoningBox.style.borderRadius = "10px";
+const reasoningBox=document.createElement("div");
+reasoningBox.id="ayurvedaAI"; reasoningBox.style.marginTop="20px"; reasoningBox.style.padding="15px";
+reasoningBox.style.borderRadius="10px";
 reasoningBox.style.background = "rgba(255,255,255,0.05)";
 reasoningBox.style.color = "#fff";
 reasoningBox.style.fontSize = "14px";
@@ -489,10 +303,13 @@ reasoningBox.style.whiteSpace = "pre-line";
 
 document.body.appendChild(reasoningBox);
 
-// Update every 2 seconds
+// Update Ayurvedic insight every 2 seconds
 setInterval(() => {
     reasoningBox.innerHTML = generateAyurvedicInsight();
 }, 2000);
-  </script>
+
+</script>
 </body>
 </html>
+
+
