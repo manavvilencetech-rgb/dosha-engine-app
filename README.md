@@ -65,10 +65,7 @@ Designed for both patients and practitioners—fast, intuitive, and distraction-
 
 ---
 
-## 📁 Project Structure
-/Doe-App │ ├── /assets │   └── icons, logos, images │ ├── index.html ├── about.html ├── app.js          # Dosha Oscillation Engine Core ├── styles.css └── README.md
 
----
 
 ## 🚀 Getting Started
 
