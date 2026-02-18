@@ -1,23 +1,22 @@
 {
   "name": "Dosha Oscillation Engine",
-  "short_name": "Dosha Engine",
+  "short_name": "DoshaEngine",
   "description": "Luxury Healing Through Ayurvedic Intelligence",
-  "start_url": "./index.html",
+  "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#0b0b0b",
   "theme_color": "#ffd700",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "logo.png",
+      "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "logo.png",
+      "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
     }
   ]
 }
-
