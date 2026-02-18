@@ -2,7 +2,7 @@
   "name": "Dosha Oscillation Engine",
   "short_name": "DoshaEngine",
   "description": "Luxury Healing Through Ayurvedic Intelligence",
-  "start_url": "/index.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#0b0b0b",
   "theme_color": "#ffd700",
