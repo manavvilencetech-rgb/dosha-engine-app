@@ -127,7 +127,7 @@ canvas { border-radius:50%; background: radial-gradient(circle, #0f0f0f, #000); 
 
 <label>Stress (PSS 0–40) <span class="range-value" id="stressVal">10</span></label>
 <input type="range" min="0" max="40" value="10" id="stress">
-<div class="slider-info">0–10 Relaxed | 11–20 Mild | 21–30 Moderate | 31–40 High</div>
+
     
 <label>Agni (1–10) <span class="range-value" id="agniVal">7</span></label>
 <input type="range" min="1" max="10" value="7" id="agni">
@@ -150,7 +150,14 @@ canvas { border-radius:50%; background: radial-gradient(circle, #0f0f0f, #000); 
 <label>Season (1–4) <span class="range-value" id="seasonVal">1</span></label>
 <input type="range" min="1" max="4" value="1" id="season">
 </div>
-
+<div class="interpret">
+1 → Winter (Kapha)<br>
+2 → Spring (Kapha-Vata)<br>
+3 → Summer (Pitta)<br>
+4 → Monsoon (Vata-Kapha)
+</div>
+  </div>
+    
 <!-- Export buttons -->
 <div style="margin-top:20px; text-align:center;">
 <button id="downloadPDF" style="padding:8px 18px; border-radius:6px; background:#ffd700; color:#000; border:none;">📄 Download PDF Report</button>
