@@ -121,42 +121,79 @@ canvas { border-radius:50%; background: radial-gradient(circle, #0f0f0f, #000); 
 
 <label>Sleep (hours) <span class="range-value" id="sleepVal">8</span></label>
 <input type="range" min="0" max="12" value="8" id="sleep">
-
+<div class="interpret">Ideal: 8 hrs; Move slider to actual sleep duration</div>
+    
 <label>Hydration (liters/day) <span class="range-value" id="hydrationVal">2</span></label>
 <input type="range" min="0" max="4" step="0.1" value="2" id="hydration">
-
+<div class="interpret">Ideal: ~2.5L/day; Move to actual intake</div>
+    
 <label>Stress (PSS 0–40) <span class="range-value" id="stressVal">10</span></label>
 <input type="range" min="0" max="40" value="10" id="stress">
-
+<div class="interpret">
+0–10 → Relaxed<br>
+11–20 → Mild stress<br>
+21–30 → Moderate stress<br>
+31–40 → High stress
+</div>
     
 <label>Agni (1–10) <span class="range-value" id="agniVal">7</span></label>
 <input type="range" min="1" max="10" value="7" id="agni">
-
+<div class="interpret">
+1–3 → Weak<br>
+4–6 → Moderate<br>
+7–8 → Strong<br>
+9–10 → Very strong
+</div>
+    
 <label>Temperature (°C) <span class="range-value" id="tempVal">36.5</span></label>
 <input type="range" min="35" max="40" step="0.1" value="36.5" id="temp">
-
+<div class="interpret">Actual body/room temperature</div>
+    
 <label>Food heaviness (0–100) <span class="range-value" id="foodVal">50</span></label>
 <input type="range" min="0" max="100" value="50" id="food">
-
+<div class="interpret">
+0–25 → Light<br>
+26–50 → Moderate<br>
+51–75 → Heavy<br>
+76–100 → Very heavy
+</div>
+    
 <label>Routine (hours/day regular) <span class="range-value" id="routineVal">8</span></label>
 <input type="range" min="0" max="24" value="8" id="routine">
-
+<div class="interpret">
+0–2 → Very irregular<br>
+3–5 → Moderately regular<br>
+6–8 → Mostly regular<br>
+9–12 → Very regular
+</div>
+    
 <label>Ama (toxins 0–100) <span class="range-value" id="amaVal">10</span></label>
 <input type="range" min="0" max="100" value="10" id="ama">
-
+<div class="interpret">
+0–25 → Minimal toxins<br>
+26–50 → Low<br>
+51–75 → Moderate<br>
+76–100 → High
+</div>
+    
 <label>Activity (minutes/day) <span class="range-value" id="activityVal">60</span></label>
 <input type="range" min="0" max="120" value="60" id="activity">
-
-<label>Season (1–4) <span class="range-value" id="seasonVal">1</span></label>
-<input type="range" min="1" max="4" value="1" id="season">
+<div class="interpret">
+0–15 → Sedentary<br>
+16–30 → Light<br>
+31–60 → Moderate<br>
+61–180 → High
 </div>
+    
+<label>Season : Ritucharya (1–4) <span class="range-value" id="seasonVal">1</span></label>
+<input type="range" min="1" max="4" value="1" id="season">
 <div class="interpret">
 1 → Winter (Kapha)<br>
 2 → Spring (Kapha-Vata)<br>
 3 → Summer (Pitta)<br>
 4 → Monsoon (Vata-Kapha)
 </div>
-  </div>
+  
     
 <!-- Export buttons -->
 <div style="margin-top:20px; text-align:center;">
